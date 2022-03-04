@@ -1,21 +1,25 @@
-package br.com.pegapelucia.peluciabrmachine.dao;
+package br.com.pegapelucia.peluciabrmachine.dto;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class JogadaInclusaoDao {
+public class JogadaInclusaoDTO {
+	
 	@JsonProperty("data_captura")
 	private LocalDate dataCaptura;
+	
 	@JsonProperty("quantidade_pelucia")
 	private Integer quantidadePelucia;
+	
 	@JsonProperty("valor_tentativa")
 	private BigDecimal valorTentativa;
+	
 	@JsonProperty("valor_investido")
 	private BigDecimal valorInvestido;
 
-	public JogadaInclusaoDao(LocalDate dataCaptura, Integer quantidadePelucia, BigDecimal valorTentativa,
+	public JogadaInclusaoDTO(LocalDate dataCaptura, Integer quantidadePelucia, BigDecimal valorTentativa,
 			BigDecimal valorInvestido) {
 		super();
 		this.dataCaptura = dataCaptura;
@@ -24,7 +28,7 @@ public class JogadaInclusaoDao {
 		this.valorInvestido = valorInvestido;
 	}
 
-	public JogadaInclusaoDao() {
+	public JogadaInclusaoDTO() {
 		super();
 	}
 

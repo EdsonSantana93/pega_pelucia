@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.pegapelucia.peluciabrmachine.dao.JogadaInclusaoDao;
-import br.com.pegapelucia.peluciabrmachine.entities.Jogada;
+import br.com.pegapelucia.peluciabrmachine.dto.JogadaDTO;
+import br.com.pegapelucia.peluciabrmachine.dto.JogadaInclusaoDTO;
 import br.com.pegapelucia.peluciabrmachine.service.JogadaService;
 
 @RestController
@@ -19,7 +19,7 @@ public class JogadaController {
 	private JogadaService service;
 
 	@PostMapping()
-	public ResponseEntity<Jogada> salvar(@RequestBody JogadaInclusaoDao jogada) {
+	public ResponseEntity<JogadaDTO> salvar(@RequestBody JogadaInclusaoDTO jogada) {
 		if (jogada == null) {
 			return ResponseEntity.badRequest().build();
 		} else {

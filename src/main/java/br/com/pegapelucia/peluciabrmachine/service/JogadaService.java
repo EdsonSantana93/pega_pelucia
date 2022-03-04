@@ -4,34 +4,39 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.UUID;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.com.pegapelucia.peluciabrmachine.dao.JogadaInclusaoDao;
+import br.com.pegapelucia.peluciabrmachine.dto.JogadaDTO;
+import br.com.pegapelucia.peluciabrmachine.dto.JogadaInclusaoDTO;
 import br.com.pegapelucia.peluciabrmachine.entities.Jogada;
 import br.com.pegapelucia.peluciabrmachine.repository.JogadaRepository;
 
 @Service
 public class JogadaService {
 	@Autowired
-	JogadaRepository repository;
+	private JogadaRepository repository;
 
-	public Jogada salvar(JogadaInclusaoDao jogadaDao) {
+	@Autowired
+	private ModelMapper mapper;
 
-		Jogada jogada = new Jogada();
+	public JogadaDTO salvar(JogadaInclusaoDTO jogadaDao) {
+
+		Jogada jogada = mapper.map(jogadaDao, Jogada.class);
 
 		jogada.setId(gerarUUID());
-		jogada.setDataCaptura(jogadaDao.getDataCaptura());
-		jogada.setQuantidadePelucia(jogadaDao.getQuantidadePelucia());
 		jogada.setValorPorPelucia(
 				calcularValorPorPelucia(jogadaDao.getQuantidadePelucia(), jogadaDao.getValorInvestido()));
-		jogada.setTentativaPorPelucia(
-				calcularTentativaPorPelucia(jogada.getValorPorPelucia(), jogadaDao.getValorTentativa(), jogadaDao.getQuantidadePelucia()));
-		jogada.setValorInvestido(jogadaDao.getValorInvestido());
-		jogada.setValorTentativa(jogadaDao.getValorTentativa());
+
+		jogada.setTentativaPorPelucia(calcularTentativaPorPelucia(jogada.getValorPorPelucia(),
+				jogadaDao.getValorTentativa(), jogadaDao.getQuantidadePelucia()));
+
 		jogada.setTentativaTotal(calcularTentativaTotal(jogada.getValorInvestido(), jogada.getValorTentativa()));
 
-		return repository.save(jogada);
+		JogadaDTO jogadaDTO = mapper.map(repository.save(jogada), JogadaDTO.class);
+
+		return jogadaDTO;
 	}
 
 	private Integer calcularTentativaTotal(BigDecimal valorInvestido, BigDecimal valorTentativa) {
@@ -39,7 +44,8 @@ public class JogadaService {
 		return tentativas.intValue();
 	}
 
-	private BigDecimal calcularTentativaPorPelucia(BigDecimal valorPorPelucia,BigDecimal valorTentativa, Integer quantidadePelucia) {
+	private BigDecimal calcularTentativaPorPelucia(BigDecimal valorPorPelucia, BigDecimal valorTentativa,
+			Integer quantidadePelucia) {
 		if (quantidadePelucia.intValue() == 0) {
 			valorTentativa = new BigDecimal(1);
 		}
